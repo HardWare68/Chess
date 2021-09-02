@@ -1,0 +1,7 @@
+Display chess board
+Ask user for move
+Check if is legal move
+perform move
+will have to add check/checkmate detection
+
+last updated 9/2/2021
