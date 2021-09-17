@@ -85,9 +85,17 @@ public class boardManager{
           //lets grab the second and third characters since thatll tell us where they want to go
           int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
           int rank = paramNextMove.charAt(2) - 1;
+
+          //if the row they wish to move on is the same as the row the rook is on, then it must be a valid move!
+          if(file == row){return true;}
+          //same holds for if the column is the same. If either of the numbers are the same, then it is a valid move.
+          if(rank == column){return true;}
         }
       }
     }
+
+    //if we have scanned the entire board, and there are either no rooks found or it was not a valid move, then it must be an illegal rook move.
+    return false;
   }
 
   /*
