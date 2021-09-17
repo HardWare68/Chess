@@ -62,11 +62,22 @@ public class boardManager{
     switch (paramNextMove.charAt(0)){
       case 'R':
         //piece is a rook, lets find out if its a legal move
-        rookMoves(paramNextMove);
+        return rookMoves(paramNextMove, 'R');
 
       case 'B':
         //piece is a bishop. lets find out if its a legal move
-        bishopMoves(paramNextMove);
+        return bishopMoves(paramNextMove, 'B');
+
+      case 'Q':
+        //piece is a queen.
+        //note that if the user sumbits a valid rook or queen move, then they have also submitted a valid queen move.
+        //also note that this will make me want to cry.
+        if(rookMoves(paramNextMove, 'Q') == false){
+          return bishopMoves(paramNextMove, 'Q');
+        } else {
+          return true;
+        }
+
     }
 
   }
@@ -76,15 +87,16 @@ public class boardManager{
   *
   * Parameters:
   * String paramNextMove: The move the user has submitted. It should be in PGN form.
+  * char paramPiece: The piece we are checking for.
   *
   * Returns: True if the move is legal. Otherwise, false.
   */
-  private boolean rookMoves(String paramNextMove){
+  private boolean rookMoves(String paramNextMove, char paramPiece){
     //first, lets find the rooks on the board
     //there will likely be two, so we have to be prepared for both of them
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(chessBoard[row][column].toUpperCase() == "R"){
+        if(chessBoard[row][column].toUpperCase().charAt(0) == paramPiece){ //this "charAt" workaround is because im lazy. and don't want to cry.
           //we found a rook. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -108,15 +120,16 @@ public class boardManager{
   *
   * Parameters:
   * String paramNextMove: The move the user has submitted. It should be in PGN form.
+  * char paramPiece: The piece we are checking for.
   *
   * Returns: True if the move is legal. Otherwise, false.
   */
-  private boolean bishopMoves(String paramNextMove){
+  private boolean bishopMoves(String paramNextMove, char paramPiece){
     //first, lets find the bishops on the board
     //there will likely be two, so we have to be prepared for both of them
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(chessBoard[row][column].toUpperCase() == "B"){
+        if(chessBoard[row][column].toUpperCase().charAt(0) == paramPiece){
           //we found a bishop. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -134,7 +147,6 @@ public class boardManager{
 
     //if we have scanned the entire board, and there are either no bishops found or it was not a valid move, then it must be an illegal bishop move.
     return false;
-  }
   }
 
   /*
