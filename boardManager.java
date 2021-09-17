@@ -59,9 +59,14 @@ public class boardManager{
   private boolean isLegalMove(String paramNextMove){
     //first, lets find out what piece we're dealing with.
 
-    if(paramNextMove.charAt(0) == 'R'){
-      //piece is a rook, lets find out if its a legal move
-      rookMoves(paramNextMove);
+    switch (paramNextMove.charAt(0)){
+      case 'R':
+        //piece is a rook, lets find out if its a legal move
+        rookMoves(paramNextMove);
+
+      case 'B':
+        //piece is a bishop. lets find out if its a legal move
+        bishopMoves(paramNextMove);
     }
 
   }
@@ -96,6 +101,40 @@ public class boardManager{
 
     //if we have scanned the entire board, and there are either no rooks found or it was not a valid move, then it must be an illegal rook move.
     return false;
+  }
+
+  /*
+  * rookMoves() checks to see if the BISHOP move is legal or not.
+  *
+  * Parameters:
+  * String paramNextMove: The move the user has submitted. It should be in PGN form.
+  *
+  * Returns: True if the move is legal. Otherwise, false.
+  */
+  private boolean bishopMoves(String paramNextMove){
+    //first, lets find the bishops on the board
+    //there will likely be two, so we have to be prepared for both of them
+    for(int row=0; row < chessBoard.length; row++){
+      for(int column=0; column < chessBoard[row].length; column++){
+        if(chessBoard[row][column].toUpperCase() == "B"){
+          //we found a bishop. lets find out where they want to place it, and if it is legal
+
+          //lets grab the second and third characters since thatll tell us where they want to go
+          int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
+          int rank = paramNextMove.charAt(2) - 1;
+
+          //okay, so bishops are a bit more complicated. the method behind them though is that they must change their rank AND file BY THE SAME NUMBER.
+          //so if the piece is on 3,3 on the array, then moving the row AND column by 2 would be valid.
+          //realize that means 2 in either direction, either up or down and left or right.
+          //this is a statement from hell. Enjoy~!
+          if(Math.abs(file-row) == Math.abs(rank-column)){return true;}
+        }
+      }
+    }
+
+    //if we have scanned the entire board, and there are either no bishops found or it was not a valid move, then it must be an illegal bishop move.
+    return false;
+  }
   }
 
   /*
