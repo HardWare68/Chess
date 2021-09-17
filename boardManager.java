@@ -77,7 +77,10 @@ public class boardManager{
         } else {
           return true;
         }
-
+      
+      case 'K':
+        //piece is a king. let's find out if it is a legal move.
+        kingMoves(paramNextMove);
     }
 
   }
@@ -116,7 +119,7 @@ public class boardManager{
   }
 
   /*
-  * rookMoves() checks to see if the BISHOP move is legal or not.
+  * bishopMoves() checks to see if the BISHOP move is legal or not.
   *
   * Parameters:
   * String paramNextMove: The move the user has submitted. It should be in PGN form.
@@ -146,6 +149,35 @@ public class boardManager{
     }
 
     //if we have scanned the entire board, and there are either no bishops found or it was not a valid move, then it must be an illegal bishop move.
+    return false;
+  }
+
+  /*
+  * bishopMoves() checks to see if the BISHOP move is legal or not.
+  *
+  * Parameters:
+  * String paramNextMove: The move the user has submitted. It should be in PGN form.
+  * char paramPiece: The piece we are checking for.
+  *
+  * Returns: True if the move is legal. Otherwise, false.
+  */
+  private boolean kingMoves(String paramNextMove){
+    //first, lets find the kings on the board
+    for(int row=0; row < chessBoard.length; row++){
+      for(int column=0; column < chessBoard[row].length; column++){
+        if(chessBoard[row][column].toUpperCase().charAt(0) == 'K'){
+          //we found a king. lets find out where they want to place it, and if it is legal
+
+          //lets grab the second and third characters since thatll tell us where they want to go
+          int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
+          int rank = paramNextMove.charAt(2) - 1;
+
+          //kings sounds easy in theory: they only move on square away! however, i am stupid.
+        }
+      }
+    }
+
+    //if we have scanned the entire board, and there are either no kings found or it was not a valid move, then it must be an illegal king move.
     return false;
   }
 
