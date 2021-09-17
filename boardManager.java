@@ -155,6 +155,6 @@ public class boardManager{
     if(Character.toUpperCase(paramFile) == 'F'){return 5;}
     if(Character.toUpperCase(paramFile) == 'G'){return 6;}
     if(Character.toUpperCase(paramFile) == 'H'){return 7;}
-    else{return -1;}
+    else{return -1;} //-1 means it's not an actual chess file. this'll probably break stuff later on down the line, so yeah.
   }
 }
