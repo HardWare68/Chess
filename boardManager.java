@@ -59,6 +59,8 @@ public class boardManager{
   private boolean isLegalMove(String paramNextMove){
     //first, lets find out what piece we're dealing with.
 
+    //if the PGN is 2 characters long (ex: e4, d7, g6), then it is the code for a pawn move. Otherwise, the PGN will be for a special piece.
+
     switch (paramNextMove.charAt(0)){
       case 'R':
         //piece is a rook, lets find out if its a legal move
@@ -81,6 +83,9 @@ public class boardManager{
       case 'K':
         //piece is a king. let's find out if it is a legal move.
         kingMoves(paramNextMove);
+        break;
+
+      
     }
 
   }
@@ -153,7 +158,7 @@ public class boardManager{
   }
 
   /*
-  * bishopMoves() checks to see if the BISHOP move is legal or not.
+  * kingMoves() checks to see if the KING move is legal or not.
   *
   * Parameters:
   * String paramNextMove: The move the user has submitted. It should be in PGN form.
@@ -173,6 +178,10 @@ public class boardManager{
           int rank = paramNextMove.charAt(2) - 1;
 
           //kings sounds easy in theory: they only move on square away! however, i am stupid.
+          //hi, HardWare a couple days into the future here. This is actually super easy. Past me is extra stupid.
+          if(Math.abs(file-row) == 1 || Math.abs(rank-column) == 1){
+            return true;
+          }
         }
       }
     }
