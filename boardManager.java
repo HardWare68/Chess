@@ -60,32 +60,35 @@ public class boardManager{
     //first, lets find out what piece we're dealing with.
 
     //if the PGN is 2 characters long (ex: e4, d7, g6), then it is the code for a pawn move. Otherwise, the PGN will be for a special piece.
+    if(paramNextMove.length() == 2){
+      pawnMoves(paramNextMove);
+    } else {
+      switch (paramNextMove.charAt(0)){
+        case 'R':
+          //piece is a rook, lets find out if its a legal move
+          return rookMoves(paramNextMove, 'R');
 
-    switch (paramNextMove.charAt(0)){
-      case 'R':
-        //piece is a rook, lets find out if its a legal move
-        return rookMoves(paramNextMove, 'R');
+        case 'B':
+          //piece is a bishop. lets find out if its a legal move
+          return bishopMoves(paramNextMove, 'B');
 
-      case 'B':
-        //piece is a bishop. lets find out if its a legal move
-        return bishopMoves(paramNextMove, 'B');
+        case 'Q':
+          //piece is a queen.
+          //note that if the user sumbits a valid rook or bishop move, then they have also submitted a valid queen move.
+          //also note that this will make me want to cry.
+          if(rookMoves(paramNextMove, 'Q') == false){
+            return bishopMoves(paramNextMove, 'Q');
+          } else {
+            return true;
+          }
+        
+        case 'K':
+          //piece is a king. let's find out if it is a legal move.
+          kingMoves(paramNextMove);
+          break;
 
-      case 'Q':
-        //piece is a queen.
-        //note that if the user sumbits a valid rook or bishop move, then they have also submitted a valid queen move.
-        //also note that this will make me want to cry.
-        if(rookMoves(paramNextMove, 'Q') == false){
-          return bishopMoves(paramNextMove, 'Q');
-        } else {
-          return true;
-        }
-      
-      case 'K':
-        //piece is a king. let's find out if it is a legal move.
-        kingMoves(paramNextMove);
-        break;
-
-      
+        
+      }
     }
 
   }
@@ -187,6 +190,40 @@ public class boardManager{
     }
 
     //if we have scanned the entire board, and there are either no kings found or it was not a valid move, then it must be an illegal king move.
+    return false;
+  }
+
+  /*
+  * pawnMoves() checks to see if the pawn move is legal or not.
+  *
+  * Parameters:
+  * String paramNextMove: The move the user has submitted. It should be in PGN form.
+  * char paramPiece: The piece we are checking for.
+  *
+  * Returns: True if the move is legal. Otherwise, false.
+  */
+  private boolean pawnMoves(String paramNextMove){
+    //first, lets find the pawns on the board
+    for(int row=0; row < chessBoard.length; row++){
+      for(int column=0; column < chessBoard[row].length; column++){
+        if(chessBoard[row][column].toUpperCase().charAt(0) == 'P'){
+          //we found a pawn. lets find out where they want to place it, and if it is legal
+
+          //lets grab the second and third characters since thatll tell us where they want to go
+          int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
+          int rank = paramNextMove.charAt(2) - 1;
+
+          //alright, pawns. If they are on the 7th or 2nd file, they can move two squares forward. And if there is a piece diagonally forwards from them, they can attack it. Otherwise, they move forwards.
+          if(row == 1 || row == 6){
+            if(Math.abs(rank-column) == 1 || Math.abs(rank-column) == 2){return true;}
+          } else if (chessBoard[Math.abs(file-row)][Math.abs(rank-column)] != " "){
+                //if the diagonal is not empty, allow it to move here
+          }
+        }
+      }
+    }
+
+    //if we have scanned the entire board, and there are either no pawns found or it was not a valid move, then it must be an illegal king move.
     return false;
   }
 
