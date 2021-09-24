@@ -90,6 +90,7 @@ public class boardManager{
         case 'N':
           //piece is a knight. let's find out if it is a legal move
           knightMoves(paramNextMove);
+          break;
       }
     }
 
