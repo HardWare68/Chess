@@ -39,6 +39,8 @@ public class boardManager{
     //next, check to make sure the piece can actually move to that square
     //who's ready for some suffering?
     isLegalMove(paramNextMove);
+
+    //so we've made sure that the piece is actually allowed to go there. lets check to make sure there is no collision though between friendly pieces.
   }
 
   private boolean isPGN(String paramNextMove){
@@ -71,7 +73,7 @@ public class boardManager{
 
         case 'Q':
           //piece is a queen.
-          //note that if the user sumbits a valid rook or bishop move, then they have also submitted a valid queen move.
+          //note that if the user submits a valid rook or bishop move, then they have also submitted a valid queen move.
           //also note that this will make me want to cry.
           if(rookMoves(paramNextMove, 'Q') == false){
             return bishopMoves(paramNextMove, 'Q');
