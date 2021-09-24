@@ -42,11 +42,7 @@ public class boardManager{
   }
 
   private boolean isPGN(String paramNextMove){
-      if(paramNextMove.matches("([NKQRB]?[A-H][1-8])|(O-O)")){
-        return true;
-      } else {
-        return false;
-      }
+    return paramNextMove.matches("([NKQRB]?[a-h][1-8])|(O-O)");//idk regex lol
   }
 
   /*
@@ -62,7 +58,7 @@ public class boardManager{
 
     //if the PGN is 2 characters long (ex: e4, d7, g6), then it is the code for a pawn move. Otherwise, the PGN will be for a special piece.
     if(paramNextMove.length() == 2){
-      pawnMoves(paramNextMove);
+      return pawnMoves(paramNextMove);
     } else {
       switch (paramNextMove.charAt(0)){
         case 'R':
@@ -92,6 +88,8 @@ public class boardManager{
           //piece is a knight. let's find out if it is a legal move
           knightMoves(paramNextMove);
           break;
+
+        case 
       }
     }
 
