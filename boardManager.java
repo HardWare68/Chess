@@ -87,7 +87,9 @@ public class boardManager{
           kingMoves(paramNextMove);
           break;
 
-        
+        case 'N':
+          //piece is a knight. let's find out if it is a legal move
+          knightMoves(paramNextMove);
       }
     }
 
@@ -214,6 +216,7 @@ public class boardManager{
           int rank = paramNextMove.charAt(2) - 1;
 
           //alright, pawns. If they are on the 7th or 2nd file, they can move two squares forward. And if there is a piece diagonally forwards from them, they can attack it. Otherwise, they move forwards.
+          //hi, HardWare a couple days into the future here. I HATE PAWNS!
           if(row == 1 || row == 6){
             if(Math.abs(rank-column) == 1 || Math.abs(rank-column) == 2){return true;}
           } else if (chessBoard[Math.abs(file-row)][Math.abs(rank-column)] != " "){
@@ -224,6 +227,38 @@ public class boardManager{
     }
 
     //if we have scanned the entire board, and there are either no pawns found or it was not a valid move, then it must be an illegal king move.
+    return false;
+  }
+
+  /*
+  * knightMoves() checks to see if the KNIGHT move is legal or not.
+  *
+  * Parameters:
+  * String paramNextMove: The move the user has submitted. It should be in PGN form.
+  *
+  * Returns: True if the move is legal. Otherwise, false.
+  */
+  private boolean knightMoves(String paramNextMove){
+    //first, lets find the rooks on the board
+    //there will likely be two, so we have to be prepared for both of them
+    for(int row=0; row < chessBoard.length; row++){
+      for(int column=0; column < chessBoard[row].length; column++){
+        if(chessBoard[row][column].toUpperCase().charAt(0) == 'K'){ //this "charAt" workaround is because im lazy. and don't want to cry.
+          //we found a rook. lets find out where they want to place it, and if it is legal
+
+          //lets grab the second and third characters since thatll tell us where they want to go
+          int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
+          int rank = paramNextMove.charAt(2) - 1;
+
+          //knights seem hard, but are actually pretty easy if you use that absolute value math I've been doing.
+          if((Math.abs(row-file) == 2 && Math.abs(rank-column) == 1) || (Math.abs(row-file) == 1 && Math.abs(rank-column) == 2)){
+            return true;
+          }
+        }
+      }
+    }
+
+    //if we have scanned the entire board, and there are either no knights found or it was not a valid move, then it must be an illegal knight move.
     return false;
   }
 
