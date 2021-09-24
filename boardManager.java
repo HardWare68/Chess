@@ -10,6 +10,7 @@ public class boardManager{
       {"P", "P", "P", "P", "P", "P", "P", "P"},
       {"R", "N", "B", "Q", "K", "B", "N", "R"}
     };
+    boolean enPassantFlag = false; //Google en passant!
 
   /*
   * printBoard() prints the current board state.
@@ -41,7 +42,7 @@ public class boardManager{
   }
 
   private boolean isPGN(String paramNextMove){
-      if(paramNextMove.matches("[NKQRB]?[A-H][1-8]")){
+      if(paramNextMove.matches("([NKQRB]?[A-H][1-8])|(O-O)")){
         return true;
       } else {
         return false;
@@ -219,7 +220,9 @@ public class boardManager{
           //alright, pawns. If they are on the 7th or 2nd file, they can move two squares forward. And if there is a piece diagonally forwards from them, they can attack it. Otherwise, they move forwards.
           //hi, HardWare a couple days into the future here. I HATE PAWNS!
           if(row == 1 || row == 6){
-            if(Math.abs(rank-column) == 1 || Math.abs(rank-column) == 2){return true;}
+            if(Math.abs(rank-column) == 1 || Math.abs(rank-column) == 2){
+              return true;
+              }
           } else{
              if (Math.abs(rank-column) == 1 || pawnDiagonalCheck(paramNextMove, file, row, rank, column)){return true;}
           }
@@ -291,6 +294,11 @@ public class boardManager{
   */
   private boolean pawnDiagonalCheck(String paramNextMove, int paramFile, int paramRow, int paramRank, int paramColumn){
     //I HATE! Pawns!
+
+    //En passant immediately overrides everything
+    if(enPassantFlag){return true;}
+
+    //check to see if the diagonals are open
     if(chessBoard[paramFile - paramRow][paramRank - paramColumn] != " "){return true;}
     if(chessBoard[paramFile - paramRow][paramRank + paramColumn] != " "){return true;}
     if(chessBoard[paramFile + paramRow][paramRank - paramColumn] != " "){return true;}
