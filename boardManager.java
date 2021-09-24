@@ -220,8 +220,8 @@ public class boardManager{
           //hi, HardWare a couple days into the future here. I HATE PAWNS!
           if(row == 1 || row == 6){
             if(Math.abs(rank-column) == 1 || Math.abs(rank-column) == 2){return true;}
-          } else if (chessBoard[Math.abs(file-row)][Math.abs(rank-column)] != " "){
-                //if the diagonal is not empty, allow it to move here
+          } else{
+             if (Math.abs(rank-column) == 1 || pawnDiagonalCheck(paramNextMove, file, row, rank, column)){return true;}
           }
         }
       }
@@ -282,5 +282,19 @@ public class boardManager{
     if(Character.toUpperCase(paramFile) == 'G'){return 6;}
     if(Character.toUpperCase(paramFile) == 'H'){return 7;}
     else{return -1;} //-1 means it's not an actual chess file. this'll probably break stuff later on down the line, so yeah.
+  }
+
+  /*
+  * pawnDiagonalCheck checks all of the pawns diagonals to see if they are valid moves
+  *
+  *
+  */
+  private boolean pawnDiagonalCheck(String paramNextMove, int paramFile, int paramRow, int paramRank, int paramColumn){
+    //I HATE! Pawns!
+    if(chessBoard[paramFile - paramRow][paramRank - paramColumn] != " "){return true;}
+    if(chessBoard[paramFile - paramRow][paramRank + paramColumn] != " "){return true;}
+    if(chessBoard[paramFile + paramRow][paramRank - paramColumn] != " "){return true;}
+    if(chessBoard[paramFile + paramRow][paramRank + paramColumn] != " "){return true;}
+    return false;
   }
 }
