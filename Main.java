@@ -28,5 +28,13 @@ class Main {
     boardManager.performMove(nextMove);
 
     }
+
+
+
+
+
+
+    //close up the scanner
+    scan.close();
   }
 }
