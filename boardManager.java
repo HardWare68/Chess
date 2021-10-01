@@ -1,14 +1,13 @@
 public class boardManager{
-  String[][] chessBoard = {
-      {"r", "n", "b", "q", "k", "b", "n", "r"},
-      {"p", "p", "p", "p", "p", "p", "p", "p"},
-      {" ", " ", " ", " ", " ", " ", " ", " "},
-      {" ", " ", " ", " ", " ", " ", " ", " "},
-      {" ", " ", " ", " ", " ", " ", " ", " "},
-      {" ", " ", " ", " ", " ", " ", " ", " "},
-      {" ", " ", " ", " ", " ", " ", " ", " "},
-      {"P", "P", "P", "P", "P", "P", "P", "P"},
-      {"R", "N", "B", "Q", "K", "B", "N", "R"}
+  char[][] chessBoard = {
+      {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+      {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+      {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+      {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
     };
     boolean enPassantFlag = false; //Google en passant!
 
@@ -34,13 +33,14 @@ public class boardManager{
   public void performMove(String paramNextMove){
     //first, the move is gonna be given to us in probably PGN form, so let's check to make sure it's in that. That'll probably help.
     isPGN(paramNextMove);
-    
 
     //next, check to make sure the piece can actually move to that square
     //who's ready for some suffering?
     isLegalMove(paramNextMove);
 
-    //so we've made sure that the piece is actually allowed to go there. lets check to make sure there is no collision though between friendly pieces.
+    int file = fileToNumber(paramNextMove.charAt(1));
+    int rank = paramNextMove.charAt(2) - 1;
+    chessBoard[file][rank] = paramNextMove.charAt(0);
   }
 
   private boolean isPGN(String paramNextMove){
@@ -90,11 +90,8 @@ public class boardManager{
           //piece is a knight. let's find out if it is a legal move
           knightMoves(paramNextMove);
           break;
-
-        case 
       }
     }
-
   }
 
   /*
@@ -111,7 +108,7 @@ public class boardManager{
     //there will likely be two, so we have to be prepared for both of them
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(chessBoard[row][column].toUpperCase().charAt(0) == paramPiece){ //this "charAt" workaround is because im lazy. and don't want to cry.
+        if(Character.toUpperCase(chessBoard[row][column]) == paramPiece){ //this "charAt" workaround is because im lazy. and don't want to cry.
           //we found a rook. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -119,7 +116,11 @@ public class boardManager{
           int rank = paramNextMove.charAt(2) - 1;
 
           //if the row they wish to move on is the same as the row the rook is on, then it must be a valid move!
-          if(file == row){return true;}
+          if(file == row){
+            //first let's make sure there is no collision. then we can return true.
+            if(rookCollision(file, row, rank, column))
+            return true;
+            }
           //same holds for if the column is the same. If either of the numbers are the same, then it is a valid move.
           if(rank == column){return true;}
         }
@@ -144,7 +145,7 @@ public class boardManager{
     //there will likely be two, so we have to be prepared for both of them
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(chessBoard[row][column].toUpperCase().charAt(0) == paramPiece){
+        if(Character.toUpperCase(chessBoard[row][column]) == paramPiece){
           //we found a bishop. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -177,7 +178,7 @@ public class boardManager{
     //first, lets find the kings on the board
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(chessBoard[row][column].toUpperCase().charAt(0) == 'K'){
+        if(Character.toUpperCase(chessBoard[row][column]) == 'K'){
           //we found a king. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -210,7 +211,7 @@ public class boardManager{
     //first, lets find the pawns on the board
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(chessBoard[row][column].toUpperCase().charAt(0) == 'P'){
+        if(Character.toUpperCase(chessBoard[row][column]) == 'P'){
           //we found a pawn. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -247,7 +248,7 @@ public class boardManager{
     //there will likely be two, so we have to be prepared for both of them
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(chessBoard[row][column].toUpperCase().charAt(0) == 'K'){ //this "charAt" workaround is because im lazy. and don't want to cry.
+        if(Character.toUpperCase(chessBoard[row][column]) == 'K'){ //this "charAt" workaround is because im lazy. and don't want to cry.
           //we found a rook. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -290,7 +291,14 @@ public class boardManager{
   /*
   * pawnDiagonalCheck checks all of the pawns diagonals to see if they are valid moves
   *
+  * Parameters:
+  * String paramNextMove: the move the user has submitted. It should be in PGN form.
+  * int paramFile: the file the user wishes to move to.
+  * int paramRow: the row the user is currently on.
+  * int paramRank: the rank the user wishes to move to.
+  * int paramColumn: the column the user is currently on.
   *
+  * Returns: True if the move is a legal move. Otherwise, false.
   */
   private boolean pawnDiagonalCheck(String paramNextMove, int paramFile, int paramRow, int paramRank, int paramColumn){
     //I HATE! Pawns!
@@ -299,10 +307,55 @@ public class boardManager{
     if(enPassantFlag){return true;}
 
     //check to see if the diagonals are open
-    if(chessBoard[paramFile - paramRow][paramRank - paramColumn] != " "){return true;}
-    if(chessBoard[paramFile - paramRow][paramRank + paramColumn] != " "){return true;}
-    if(chessBoard[paramFile + paramRow][paramRank - paramColumn] != " "){return true;}
-    if(chessBoard[paramFile + paramRow][paramRank + paramColumn] != " "){return true;}
+    if(chessBoard[paramFile - paramRow][paramRank - paramColumn] != ' '){return true;}
+    if(chessBoard[paramFile - paramRow][paramRank + paramColumn] != ' '){return true;}
+    if(chessBoard[paramFile + paramRow][paramRank - paramColumn] != ' '){return true;}
+    if(chessBoard[paramFile + paramRow][paramRank + paramColumn] != ' '){return true;}
     return false;
+  }
+
+
+  /*
+  * rookCollision checks along the rows and columns to make sure we are not hopping over pieces.
+  *
+  * Parameters:
+  * int paramFile: the file the user wishes to move to.
+  * int paramRow: the row the user is currently on.
+  * int paramRank: the rank the user wishes to move to.
+  * int paramColumn: the column the user is currently on.
+  *
+  * Returns: True if the move the row/column is unobstructed. Otherwise, false.
+  */
+  private boolean rookCollision(int paramFile, int paramRow, int paramRank, int paramColumn){
+    //first, lets find out if we are dealing with rows or columns
+    if(paramFile == paramRow){
+      //the rows are the same. let us find out the stuff with the columns then.
+      // /!\ x represents the distance between the two. this might help later, so i'm commenting it here /!\
+      for(int x=1; x > (Math.abs(paramRank - paramColumn)); x++){
+        //hi there, me right now programming this. i want to cry.
+
+        //the rank is bigger. we are gonna keep going left, hoping we don't hit a piece
+        if(paramRank > paramColumn){
+          if(chessBoard[paramRow][paramRank - paramColumn] != ' '){return false;} //the square is not empty, which means it is not good.
+        } else {
+          //if the rank is not greater, then the column they want to move to is. just keep going left, fellas.
+          if(chessBoard[paramRow][paramColumn - paramRank] != ' '){return false;}
+        }
+      } //so we should have scanned every square between the two columns, and each one should be empty by the time we have gotten to this point. thus, we should be good to return true.
+      return true;
+    } else {
+      //if the rows are not equal, then the columns must be.
+      for(int x=1; x > (Math.abs(paramFile - paramRow)); x++){
+
+        //the file is bigger. we are gonna keep going left, hoping we don't hit a piece
+        if(paramFile > paramRow){
+          if(chessBoard[paramFile - paramRow][paramColumn] != ' '){return false;} //the square is not empty, which means it is not good.
+        } else {
+          //if the rank is not greater, then the column they want to move to is. just keep going left, fellas.
+          if(chessBoard[paramRow - paramFile][paramColumn] != ' '){return false;}
+        }
+      } //so we should have scanned every square between the two columns, and each one should be empty by the time we have gotten to this point. thus, we should be good to return true.
+      return true;
+    }
   }
 }
