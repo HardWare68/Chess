@@ -37,10 +37,17 @@ public class boardManager{
     //next, check to make sure the piece can actually move to that square
     //who's ready for some suffering?
     isLegalMove(paramNextMove);
+    int file, rank;
+    if(paramNextMove.length() == 3){
+      file = fileToNumber(paramNextMove.charAt(1));
+      rank = paramNextMove.charAt(2);
+      chessBoard[file][rank] = paramNextMove.charAt(0);
+    } else {
+      file = fileToNumber(paramNextMove.charAt(0));
+      rank = paramNextMove.charAt(1);
+      chessBoard[file][rank] = 'p';
+    }
 
-    int file = fileToNumber(paramNextMove.charAt(1));
-    int rank = paramNextMove.charAt(2) - 1;
-    chessBoard[file][rank] = paramNextMove.charAt(0);
   }
 
   private boolean isPGN(String paramNextMove){
@@ -83,15 +90,15 @@ public class boardManager{
         
         case 'K':
           //piece is a king. let's find out if it is a legal move.
-          kingMoves(paramNextMove);
-          break;
+          return kingMoves(paramNextMove);
 
         case 'N':
           //piece is a knight. let's find out if it is a legal move
-          knightMoves(paramNextMove);
-          break;
+          return knightMoves(paramNextMove);
       }
     }
+    //the compiler yells at me unless i put this here.
+    return false;
   }
 
   /*
@@ -215,8 +222,8 @@ public class boardManager{
           //we found a pawn. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
-          int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
-          int rank = paramNextMove.charAt(2) - 1;
+          int file = fileToNumber(paramNextMove.charAt(0)); //the file is given to us as a letter. let's make that into a number!
+          int rank = paramNextMove.charAt(1) - 1;
 
           //alright, pawns. If they are on the 7th or 2nd file, they can move two squares forward. And if there is a piece diagonally forwards from them, they can attack it. Otherwise, they move forwards.
           //hi, HardWare a couple days into the future here. I HATE PAWNS!
