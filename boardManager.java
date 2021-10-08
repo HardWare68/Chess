@@ -32,29 +32,29 @@ public class boardManager{
   */
   public void performMove(String paramNextMove){
     //first, the move is gonna be given to us in probably PGN form, so let's check to make sure it's in that. That'll probably help.
-    isPGN(paramNextMove);
-
-    //next, check to make sure the piece can actually move to that square
-    //who's ready for some suffering?
-    isLegalMove(paramNextMove);
-    int file, rank;
-    if(paramNextMove.length() == 3){
-      file = fileToNumber(paramNextMove.charAt(1));
-      rank = rankToNumber(paramNextMove.charAt(2));
-      try{
-      chessBoard[file][rank] = paramNextMove.charAt(0);
-       } catch (Exception ArrayIndexOutOfBoundsException) {
-         System.out.println("File is: " + file);
-         System.out.println("Rank is: " + rank);
-         System.out.println("Length of master array is: " + chessBoard.length);
-         System.out.println("Length of inside array is: " + chessBoard[0].length);
-       }
+    if(!isPGN(paramNextMove)){
+      System.out.println("That is not in PGN form. Please format your move in PGN form.");
+    } else if(!isLegalMove(paramNextMove)) {
+      System.out.println("That move is not legal. Please double check to make sure it is a legal move.");
     } else {
-      file = fileToNumber(paramNextMove.charAt(0));
-      rank = rankToNumber(paramNextMove.charAt(1));
-      chessBoard[file][rank] = 'p';
+      int file, rank;
+      if(paramNextMove.length() == 3){
+        file = fileToNumber(paramNextMove.charAt(1));
+        rank = rankToNumber(paramNextMove.charAt(2));
+        try{
+        chessBoard[file][rank] = paramNextMove.charAt(0);
+        } catch (Exception ArrayIndexOutOfBoundsException) {
+          System.out.println("File is: " + file);
+          System.out.println("Rank is: " + rank);
+          System.out.println("Length of master array is: " + chessBoard.length);
+          System.out.println("Length of inside array is: " + chessBoard[0].length);
+        }
+      } else {
+        file = fileToNumber(paramNextMove.charAt(0));
+        rank = rankToNumber(paramNextMove.charAt(1));
+        chessBoard[file][rank] = 'p';
+      }
     }
-
   }
 
   private boolean isPGN(String paramNextMove){
@@ -79,7 +79,7 @@ public class boardManager{
       switch (paramNextMove.charAt(0)){
         case 'R':
           //piece is a rook, lets find out if its a legal move
-          return rookMoves(paramNextMove, 'R');
+          return (rookMoves(paramNextMove, 'R'));
 
         case 'B':
           //piece is a bishop. lets find out if its a legal move
@@ -132,11 +132,10 @@ public class boardManager{
           //if the row they wish to move on is the same as the row the rook is on, then it must be a valid move!
           if(file == row){
             //first let's make sure there is no collision. then we can return true.
-            if(rookCollision(file, row, rank, column))
-            return true;
+            return (rookCollision(file, row, rank, column));
             }
           //same holds for if the column is the same. If either of the numbers are the same, then it is a valid move.
-          if(rank == column){return true;}
+          if(rank == column){return (rookCollision(file, row, rank, column));}
         }
       }
     }
