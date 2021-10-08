@@ -122,8 +122,9 @@ public class boardManager{
     //there will likely be two, so we have to be prepared for both of them
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(Character.toUpperCase(chessBoard[row][column]) == paramPiece){ //this "charAt" workaround is because im lazy. and don't want to cry.
+        if(Character.toUpperCase(chessBoard[row][column]) == paramPiece){
           //we found a rook. lets find out where they want to place it, and if it is legal
+          System.out.println("Found rook at: " + row + ", " + column);
 
           //lets grab the second and third characters since thatll tell us where they want to go
           int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
@@ -131,11 +132,15 @@ public class boardManager{
 
           //if the row they wish to move on is the same as the row the rook is on, then it must be a valid move!
           if(file == row){
+            System.out.println("Rook is on the same row!");
             //first let's make sure there is no collision. then we can return true.
             return (rookCollision(file, row, rank, column));
             }
           //same holds for if the column is the same. If either of the numbers are the same, then it is a valid move.
-          if(rank == column){return (rookCollision(file, row, rank, column));}
+          if(rank == column){
+            System.out.println("Rook is on the same column!");
+            return (rookCollision(file, row, rank, column));
+            }
         }
       }
     }
@@ -370,10 +375,12 @@ public class boardManager{
 
         //the rank is bigger. we are gonna keep going left, hoping we don't hit a piece
         if(paramRank > paramColumn){
-          if(chessBoard[paramRow][paramRank - paramColumn] != ' '){return false;} //the square is not empty, which means it is not good.
+          System.out.print("Square at " + paramRow + ", " + (paramRank - x) + " is " + chessBoard[paramRow][paramRank - x]);
+          if(chessBoard[paramRow][paramRank - x] != ' '){return false;} //the square is not empty, which means it is not good.
         } else {
+          System.out.print("Square at " + paramRow + ", " + (paramColumn - x) + " is " + chessBoard[paramRow][paramColumn - x]);
           //if the rank is not greater, then the column they want to move to is. just keep going left, fellas.
-          if(chessBoard[paramRow][paramColumn - paramRank] != ' '){return false;}
+          if(chessBoard[paramRow][paramColumn - x] != ' '){return false;}
         }
       } //so we should have scanned every square between the two columns, and each one should be empty by the time we have gotten to this point. thus, we should be good to return true.
       return true;
@@ -383,10 +390,10 @@ public class boardManager{
 
         //the file is bigger. we are gonna keep going left, hoping we don't hit a piece
         if(paramFile > paramRow){
-          if(chessBoard[paramFile - paramRow][paramColumn] != ' '){return false;} //the square is not empty, which means it is not good.
+          if(chessBoard[paramFile - x][paramColumn] != ' '){return false;} //the square is not empty, which means it is not good.
         } else {
           //if the rank is not greater, then the column they want to move to is. just keep going left, fellas.
-          if(chessBoard[paramRow - paramFile][paramColumn] != ' '){return false;}
+          if(chessBoard[paramRow - x][paramColumn] != ' '){return false;}
         }
       } //so we should have scanned every square between the two columns, and each one should be empty by the time we have gotten to this point. thus, we should be good to return true.
       return true;
