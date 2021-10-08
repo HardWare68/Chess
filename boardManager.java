@@ -1,13 +1,13 @@
 public class boardManager{
   char[][] chessBoard = {
-      {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+      {'r', 'n', 'b', 'k', 'q', 'b', 'n', 'r'},
       {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
       {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
       {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
       {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
       {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
       {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
-      {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
+      {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'}
     };
     boolean enPassantFlag = false; //Google en passant!
 
