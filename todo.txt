@@ -1,7 +1,8 @@
-Display chess board
-Ask user for move
+Display chess board \/
+Ask user for move \/
 Check if is legal move
-perform move
+NEED TO FIX LOGIC DETECTION
+perform move \/
 will have to add check/checkmate detection
 
-last updated 9/2/2021
+last updated 10/8/2021
