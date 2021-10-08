@@ -12,9 +12,10 @@ class Main {
     Scanner scan = new Scanner(System.in);
 
     System.out.println("Hello world!");
-    boardManager.printBoard();
+
     
     while (boolIsGameWon == false){
+      boardManager.printBoard();
       //get the next move from the user
       if(playerTurn == 1){
         System.out.println("It's player 1's turn!");
@@ -26,6 +27,11 @@ class Main {
 
 
     boardManager.performMove(nextMove);
+    if(playerTurn == 1){
+        playerTurn = 2;
+      } else {
+        playerTurn = 1;
+      }
 
     }
 

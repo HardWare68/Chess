@@ -40,11 +40,18 @@ public class boardManager{
     int file, rank;
     if(paramNextMove.length() == 3){
       file = fileToNumber(paramNextMove.charAt(1));
-      rank = paramNextMove.charAt(2);
+      rank = rankToNumber(paramNextMove.charAt(2));
+      try{
       chessBoard[file][rank] = paramNextMove.charAt(0);
+       } catch (Exception ArrayIndexOutOfBoundsException) {
+         System.out.println("File is: " + file);
+         System.out.println("Rank is: " + rank);
+         System.out.println("Length of master array is: " + chessBoard.length);
+         System.out.println("Length of inside array is: " + chessBoard[0].length);
+       }
     } else {
       file = fileToNumber(paramNextMove.charAt(0));
-      rank = paramNextMove.charAt(1);
+      rank = rankToNumber(paramNextMove.charAt(1));
       chessBoard[file][rank] = 'p';
     }
 
@@ -120,7 +127,7 @@ public class boardManager{
 
           //lets grab the second and third characters since thatll tell us where they want to go
           int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
-          int rank = paramNextMove.charAt(2) - 1;
+          int rank = rankToNumber(paramNextMove.charAt(2));
 
           //if the row they wish to move on is the same as the row the rook is on, then it must be a valid move!
           if(file == row){
@@ -157,7 +164,7 @@ public class boardManager{
 
           //lets grab the second and third characters since thatll tell us where they want to go
           int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
-          int rank = paramNextMove.charAt(2) - 1;
+          int rank = rankToNumber(paramNextMove.charAt(2));
 
           //okay, so bishops are a bit more complicated. the method behind them though is that they must change their rank AND file BY THE SAME NUMBER.
           //so if the piece is on 3,3 on the array, then moving the row AND column by 2 would be valid.
@@ -190,7 +197,7 @@ public class boardManager{
 
           //lets grab the second and third characters since thatll tell us where they want to go
           int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
-          int rank = paramNextMove.charAt(2) - 1;
+          int rank = rankToNumber(paramNextMove.charAt(2));
 
           //kings sounds easy in theory: they only move on square away! however, i am stupid.
           //hi, HardWare a couple days into the future here. This is actually super easy. Past me is extra stupid.
@@ -223,7 +230,7 @@ public class boardManager{
 
           //lets grab the second and third characters since thatll tell us where they want to go
           int file = fileToNumber(paramNextMove.charAt(0)); //the file is given to us as a letter. let's make that into a number!
-          int rank = paramNextMove.charAt(1) - 1;
+          int rank = rankToNumber(paramNextMove.charAt(1));
 
           //alright, pawns. If they are on the 7th or 2nd file, they can move two squares forward. And if there is a piece diagonally forwards from them, they can attack it. Otherwise, they move forwards.
           //hi, HardWare a couple days into the future here. I HATE PAWNS!
@@ -260,7 +267,7 @@ public class boardManager{
 
           //lets grab the second and third characters since thatll tell us where they want to go
           int file = fileToNumber(paramNextMove.charAt(1)); //the file is given to us as a letter. let's make that into a number!
-          int rank = paramNextMove.charAt(2) - 1;
+          int rank = rankToNumber(paramNextMove.charAt(2));
 
           //knights seem hard, but are actually pretty easy if you use that absolute value math I've been doing.
           if((Math.abs(row-file) == 2 && Math.abs(rank-column) == 1) || (Math.abs(row-file) == 1 && Math.abs(rank-column) == 2)){
@@ -293,6 +300,27 @@ public class boardManager{
     if(Character.toUpperCase(paramFile) == 'G'){return 6;}
     if(Character.toUpperCase(paramFile) == 'H'){return 7;}
     else{return -1;} //-1 means it's not an actual chess file. this'll probably break stuff later on down the line, so yeah.
+  }
+
+  /*
+  * rankToNumber() converts the rank to an integer.
+  *
+  * Parameters:
+  * char paramRank: The rank we wish to convert.
+  *
+  * Returns: An integer that describes where on the array the rank is.
+  */
+  private int rankToNumber(char paramRank){
+    //I HATE THIS! THIS IS STUPID!!! GRRRRRRRR!!!!!
+    if(Character.toUpperCase(paramRank) == '1'){return 0;}
+    if(Character.toUpperCase(paramRank) == '2'){return 1;}
+    if(Character.toUpperCase(paramRank) == '3'){return 2;}
+    if(Character.toUpperCase(paramRank) == '4'){return 3;}
+    if(Character.toUpperCase(paramRank) == '5'){return 4;}
+    if(Character.toUpperCase(paramRank) == '6'){return 5;}
+    if(Character.toUpperCase(paramRank) == '7'){return 6;}
+    if(Character.toUpperCase(paramRank) == '8'){return 7;}
+    else{return -1;} //-1 means it's not an actual chess rank. this'll probably break stuff later on down the line, so yeah.
   }
 
   /*
