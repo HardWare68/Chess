@@ -22,11 +22,11 @@ class Main {
       } else {
         System.out.println("It's player 2's turn!");
       }
-      System.out.println("Enter your move! Format it in PGN format. (PGN formation is like so: (letter of piece)(file you wish to move to)(rank you wish to move to)");
+      System.out.println("Enter your move! Format it in PGN format. (PGN formation is like so: (letter of piece)(file you wish to move to)(rank you wish to move to).)");
       nextMove = scan.nextLine();
 
 
-    boardManager.performMove(nextMove);
+    boardManager.performMove(nextMove, playerTurn);
     if(playerTurn == 1){
         playerTurn = 2;
       } else {

@@ -30,7 +30,7 @@ public class boardManager{
   * Parameters:
   * String paramNextMove: The move the user has submitted. It should be in PGN form.
   */
-  public void performMove(String paramNextMove){
+  public void performMove(String paramNextMove, int paramPlayerMove){
     //first, the move is gonna be given to us in probably PGN form, so let's check to make sure it's in that. That'll probably help.
     if(!isPGN(paramNextMove)){
       System.out.println("That is not in PGN form. Please format your move in PGN form.");
@@ -42,17 +42,26 @@ public class boardManager{
         file = fileToNumber(paramNextMove.charAt(1));
         rank = rankToNumber(paramNextMove.charAt(2));
         try{
-        chessBoard[file][rank] = paramNextMove.charAt(0);
+          if(paramPlayerMove == 1){
+            chessBoard[file][rank] = paramNextMove.charAt(0);
+          } else {
+            chessBoard[file][rank] = Character.toUpperCase(paramNextMove.charAt(0));
+          }
         } catch (Exception ArrayIndexOutOfBoundsException) {
           System.out.println("File is: " + file);
           System.out.println("Rank is: " + rank);
           System.out.println("Length of master array is: " + chessBoard.length);
           System.out.println("Length of inside array is: " + chessBoard[0].length);
+          System.out.println("If you are seeing this something went horribly wrong. That is unfortunate.");
         }
       } else {
         file = fileToNumber(paramNextMove.charAt(0));
         rank = rankToNumber(paramNextMove.charAt(1));
-        chessBoard[file][rank] = 'p';
+        if(paramPlayerMove == 1){
+            chessBoard[file][rank] = 'P';
+          } else {
+            chessBoard[file][rank] = 'p';
+          }
       }
     }
   }
@@ -133,6 +142,8 @@ public class boardManager{
           //if the row they wish to move on is the same as the row the rook is on, then it must be a valid move!
           if(file == row){
             System.out.println("Rook is on the same row!");
+
+            
             //first let's make sure there is no collision. then we can return true.
             return (rookCollision(file, row, rank, column));
             }
