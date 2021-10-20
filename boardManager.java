@@ -43,7 +43,8 @@ public class boardManager{
         rank = rankToNumber(paramNextMove.charAt(2));
         try{
           if(paramPlayerMove == 1){
-            chessBoard[file][rank] = paramNextMove.charAt(0);
+            //if the player is 1, which means its the upper case pieces, upper case the letter
+            chessBoard[file][rank] = Character.toLowerCase(paramNextMove.charAt(0));
           } else {
             chessBoard[file][rank] = Character.toUpperCase(paramNextMove.charAt(0));
           }
@@ -142,14 +143,20 @@ public class boardManager{
           //if the row they wish to move on is the same as the row the rook is on, then it must be a valid move!
           if(file == row){
             System.out.println("Rook is on the same row!");
-
-            
             //first let's make sure there is no collision. then we can return true.
+            if(rookCollision(file, row, rank, column)){
+              //since its a valid move, we can go ahead and clear out the square the piece used to be on
+              chessBoard[row][column] = ' '; 
+            }
             return (rookCollision(file, row, rank, column));
             }
           //same holds for if the column is the same. If either of the numbers are the same, then it is a valid move.
           if(rank == column){
             System.out.println("Rook is on the same column!");
+            if(rookCollision(file, row, rank, column)){
+              //since its a valid move, we can go ahead and clear out the square the piece used to be on
+              chessBoard[row][column] = ' '; 
+            }
             return (rookCollision(file, row, rank, column));
             }
         }
@@ -381,9 +388,8 @@ public class boardManager{
     if(paramFile == paramRow){
       //the rows are the same. let us find out the stuff with the columns then.
       // /!\ x represents the distance between the two. this might help later, so i'm commenting it here /!\
-      for(int x=1; x > (Math.abs(paramRank - paramColumn)); x++){
+      for(int x=1; x < (Math.abs(paramRank - paramColumn)); x++){
         //hi there, me right now programming this. i want to cry.
-
         //the rank is bigger. we are gonna keep going left, hoping we don't hit a piece
         if(paramRank > paramColumn){
           System.out.print("Square at " + paramRow + ", " + (paramRank - x) + " is " + chessBoard[paramRow][paramRank - x]);
