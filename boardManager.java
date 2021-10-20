@@ -10,6 +10,7 @@ public class boardManager{
       {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'}
     };
     boolean enPassantFlag = false; //Google en passant!
+    boolean performedMoveFlag = false; //a flag to show if we performed the move
 
   /*
   * printBoard() prints the current board state.
@@ -31,6 +32,7 @@ public class boardManager{
   * String paramNextMove: The move the user has submitted. It should be in PGN form.
   */
   public void performMove(String paramNextMove, int paramPlayerMove){
+    boolean performedMoveFlag = false;
     //first, the move is gonna be given to us in probably PGN form, so let's check to make sure it's in that. That'll probably help.
     if(!isPGN(paramNextMove)){
       System.out.println("That is not in PGN form. Please format your move in PGN form.");
@@ -45,8 +47,10 @@ public class boardManager{
           if(paramPlayerMove == 1){
             //if the player is 1, which means its the upper case pieces, upper case the letter
             chessBoard[file][rank] = Character.toLowerCase(paramNextMove.charAt(0));
+            performedMoveFlag = true;
           } else {
             chessBoard[file][rank] = Character.toUpperCase(paramNextMove.charAt(0));
+            performedMoveFlag = true;
           }
         } catch (Exception ArrayIndexOutOfBoundsException) {
           System.out.println("File is: " + file);
@@ -60,8 +64,10 @@ public class boardManager{
         rank = rankToNumber(paramNextMove.charAt(1));
         if(paramPlayerMove == 1){
             chessBoard[file][rank] = 'P';
+            performedMoveFlag = true;
           } else {
             chessBoard[file][rank] = 'p';
+            performedMoveFlag = true;
           }
       }
     }
@@ -258,10 +264,14 @@ public class boardManager{
           //hi, HardWare a couple days into the future here. I HATE PAWNS!
           if(row == 1 || row == 6){
             if(Math.abs(rank-column) == 1 || Math.abs(rank-column) == 2){
+              chessBoard[row][column] = ' ';
               return true;
               }
-          } else{
-             if (Math.abs(rank-column) == 1 || pawnDiagonalCheck(paramNextMove, file, row, rank, column)){return true;}
+          } else {
+             if (Math.abs(rank-column) == 1 || pawnDiagonalCheck(paramNextMove, file, row, rank, column)){
+               chessBoard[row][column] = ' '; 
+               return true;
+            }
           }
         }
       }
@@ -392,10 +402,8 @@ public class boardManager{
         //hi there, me right now programming this. i want to cry.
         //the rank is bigger. we are gonna keep going left, hoping we don't hit a piece
         if(paramRank > paramColumn){
-          System.out.print("Square at " + paramRow + ", " + (paramRank - x) + " is " + chessBoard[paramRow][paramRank - x]);
           if(chessBoard[paramRow][paramRank - x] != ' '){return false;} //the square is not empty, which means it is not good.
         } else {
-          System.out.print("Square at " + paramRow + ", " + (paramColumn - x) + " is " + chessBoard[paramRow][paramColumn - x]);
           //if the rank is not greater, then the column they want to move to is. just keep going left, fellas.
           if(chessBoard[paramRow][paramColumn - x] != ' '){return false;}
         }

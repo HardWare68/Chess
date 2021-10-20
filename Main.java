@@ -27,7 +27,7 @@ class Main {
 
 
     boardManager.performMove(nextMove, playerTurn);
-    if(playerTurn == 1){
+    if(playerTurn == 1 && boardManager.performedMoveFlag){
         playerTurn = 2;
       } else {
         playerTurn = 1;

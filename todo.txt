@@ -2,8 +2,9 @@ Display chess board \/
 Ask user for move \/
 Check if is legal move
   NEED TO FIX LOGIC DETECTION
-  ACTUALLY MOVE THE PIECE AND NOT REPLICATE IT
+  CHECK FOR LOWER VS. UPPER
+  ACTUALLY MOVE THE PIECE AND NOT REPLICATE IT \/
 perform move \/
 will have to add check/checkmate detection
 
-last updated 10/8/2021
+last updated 10/20/2021
