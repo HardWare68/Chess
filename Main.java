@@ -15,6 +15,7 @@ class Main {
 
     
     while (boolIsGameWon == false){
+      System.out.println();
       boardManager.printBoard();
       //get the next move from the user
       if(playerTurn == 1){

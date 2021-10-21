@@ -10,7 +10,7 @@ public class boardManager{
       {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'}
     };
     boolean enPassantFlag = false; //Google en passant!
-    boolean performedMoveFlag = false; //a flag to show if we performed the move
+    boolean performedMoveFlag; //a flag to show if we performed the move
 
   /*
   * printBoard() prints the current board state.
@@ -32,11 +32,13 @@ public class boardManager{
   * String paramNextMove: The move the user has submitted. It should be in PGN form.
   */
   public void performMove(String paramNextMove, int paramPlayerMove){
-    boolean performedMoveFlag = false;
+    performedMoveFlag = false;
+    enPassantFlag = false;
+
     //first, the move is gonna be given to us in probably PGN form, so let's check to make sure it's in that. That'll probably help.
     if(!isPGN(paramNextMove)){
       System.out.println("That is not in PGN form. Please format your move in PGN form.");
-    } else if(!isLegalMove(paramNextMove)) {
+    } else if(!isLegalMove(paramNextMove, paramPlayerMove)) {
       System.out.println("That move is not legal. Please double check to make sure it is a legal move.");
     } else {
       int file, rank;
@@ -46,10 +48,10 @@ public class boardManager{
         try{
           if(paramPlayerMove == 1){
             //if the player is 1, which means its the upper case pieces, upper case the letter
-            chessBoard[file][rank] = Character.toLowerCase(paramNextMove.charAt(0));
+            chessBoard[rank][file] = Character.toLowerCase(paramNextMove.charAt(0));
             performedMoveFlag = true;
           } else {
-            chessBoard[file][rank] = Character.toUpperCase(paramNextMove.charAt(0));
+            chessBoard[rank][file] = Character.toUpperCase(paramNextMove.charAt(0));
             performedMoveFlag = true;
           }
         } catch (Exception ArrayIndexOutOfBoundsException) {
@@ -63,11 +65,13 @@ public class boardManager{
         file = fileToNumber(paramNextMove.charAt(0));
         rank = rankToNumber(paramNextMove.charAt(1));
         if(paramPlayerMove == 1){
-            chessBoard[file][rank] = 'P';
+            chessBoard[rank][file] = 'P';
             performedMoveFlag = true;
+            enPassantFlag = true;
           } else {
-            chessBoard[file][rank] = 'p';
+            chessBoard[rank][file] = 'p';
             performedMoveFlag = true;
+            enPassantFlag = true;
           }
       }
     }
@@ -85,12 +89,12 @@ public class boardManager{
   *
   * Returns: True if the move is legal. Otherwise, false.
   */
-  private boolean isLegalMove(String paramNextMove){
+  private boolean isLegalMove(String paramNextMove, int paramPlayerMove){
     //first, lets find out what piece we're dealing with.
 
     //if the PGN is 2 characters long (ex: e4, d7, g6), then it is the code for a pawn move. Otherwise, the PGN will be for a special piece.
     if(paramNextMove.length() == 2){
-      return pawnMoves(paramNextMove);
+      return pawnMoves(paramNextMove, paramPlayerMove);
     } else {
       switch (paramNextMove.charAt(0)){
         case 'R':
@@ -198,7 +202,10 @@ public class boardManager{
           //so if the piece is on 3,3 on the array, then moving the row AND column by 2 would be valid.
           //realize that means 2 in either direction, either up or down and left or right.
           //this is a statement from hell. Enjoy~!
-          if(Math.abs(file-row) == Math.abs(rank-column)){return true;}
+          if(Math.abs(file-row) == Math.abs(rank-column)){
+            chessBoard[row][column] = ' ';
+            return true;
+          }
         }
       }
     }
@@ -230,6 +237,7 @@ public class boardManager{
           //kings sounds easy in theory: they only move on square away! however, i am stupid.
           //hi, HardWare a couple days into the future here. This is actually super easy. Past me is extra stupid.
           if(Math.abs(file-row) == 1 || Math.abs(rank-column) == 1){
+            chessBoard[row][column] = ' ';
             return true;
           }
         }
@@ -249,11 +257,14 @@ public class boardManager{
   *
   * Returns: True if the move is legal. Otherwise, false.
   */
-  private boolean pawnMoves(String paramNextMove){
+  private boolean pawnMoves(String paramNextMove, int paramPlayerMove){
     //first, lets find the pawns on the board
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(Character.toUpperCase(chessBoard[row][column]) == 'P'){
+        char checkPiece = 'p';
+        if(paramPlayerMove == 1){checkPiece = 'P';} //if it's player one's turn to move, then check for capitals
+        if(Character.toUpperCase(chessBoard[row][column]) == checkPiece){
+          System.out.println("Found a pawn at: " + row + ", " + column);
           //we found a pawn. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -294,7 +305,7 @@ public class boardManager{
     //there will likely be two, so we have to be prepared for both of them
     for(int row=0; row < chessBoard.length; row++){
       for(int column=0; column < chessBoard[row].length; column++){
-        if(Character.toUpperCase(chessBoard[row][column]) == 'K'){ //this "charAt" workaround is because im lazy. and don't want to cry.
+        if(Character.toUpperCase(chessBoard[row][column]) == 'N'){ //this "charAt" workaround is because im lazy. and don't want to cry.
           //we found a rook. lets find out where they want to place it, and if it is legal
 
           //lets grab the second and third characters since thatll tell us where they want to go
@@ -303,6 +314,7 @@ public class boardManager{
 
           //knights seem hard, but are actually pretty easy if you use that absolute value math I've been doing.
           if((Math.abs(row-file) == 2 && Math.abs(rank-column) == 1) || (Math.abs(row-file) == 1 && Math.abs(rank-column) == 2)){
+            chessBoard[row][column] = ' ';
             return true;
           }
         }
